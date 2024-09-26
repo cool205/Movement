@@ -1,0 +1,128 @@
+public class MyFIRSTJavaOpMode extends LinearOpMode {
+    // change this to match motor configuration
+    DcMotor backLeftDrive;
+    DcMotor backRightDrive;
+    DcMotor frontLeftDrive;
+    DcMotor frontRightDrive;
+    BNO055IMU imu;
+
+@Override
+    public void runOpMode() {
+      backLeftDrive = hardwareMap.get(DcMotor.class, "backLeftDrive");
+      backRightDrive = hardwareMap.get(DcMotor.class, "backRightDrive");
+      frontLeftDrive = hardwareMap.get(DcMotor.class, "frontLeftDrive");
+      frontRightDrive = hardwareMap.get(DcMotor.class, "frontRightDrive");
+      imu = hardwareMap.get(BNO055IMU.class, "imu");
+      // Put initialization blocks here
+      backLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+      frontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
+      var backLeftPower = 0;
+      var backRightPower = 0;
+      var frontLeftPower = 0;
+      var frontRightPower = 0;
+      waitForStart();
+      // Put run blocks here
+      while (opModeIsActive()) {
+        // "w" key ... forward
+        if (gamepad1.pressKey(87)) {
+          var frontLeftPowerFoward = 0.5;
+          var frontRightPowerForward = 0.5;
+          var backLeftPowerForward = 0.5;
+          var backRightPowerForward = 0.5;
+          var forwardMotion = 1;
+        } else {
+          var frontLeftPowerFoward = 0;
+          var frontRightPowerForward = 0;
+          var backLeftPowerForward = 0;
+          var backRightPowerForward = 0;
+          var forwardMotion = 0;
+        }
+        // "s" key ... backward
+        if (gamepad1.pressKey(83)) {
+          var frontLeftPowerBackward = -0.5;
+          var frontRightPowerBackward = -0.5;
+          var backLeftPowerBackward = -0.5;
+          var backRightPowerBackward = -0.5;
+          var backwardMotion = 1;
+        } else {
+          var frontLeftPowerBackward = 0;
+          var frontRightPowerBackward  0;
+          var backLeftPowerBackward = 0;
+          var backRightPowerBackward = 0;
+          var backwardMotion = 0;
+        }
+        // "d" key ... turn right
+        if (gamepad1.pressKey(68)) {
+          var frontLeftPowerTurnRight = 0.5;
+          var frontRightPowerTurnRight = -0.5;
+          var backLeftPowerTurnRight = 0.5;
+          var backRightPowerTurnRight = -0.5;
+          var turnRightMotion = 1;
+        } else {
+          var frontLeftPowerTurnRight = 0;
+          var frontRightPowerTurnRight = 0;
+          var backLeftPowerTurnRight = 0;
+          var backRightPowerTurnRight = 0;
+          var turnRightMotion = 0;
+        }
+        // "a" key ... turn left
+        if (gamepad1.pressKey(65)) {
+          var frontLeftPowerTurnLeft = -0.5;
+          var frontRightPowerTurnLeft = 0.5;
+          var backLeftPowerTurnLeft = -0.5;
+          var backRightPowerTurnLeft = 0.5;
+          var turnLeftMotion = 1;
+        } else {
+          var frontLeftPowerTurnLeft = 0;
+          var frontRightPowerTurnLeft = 0;
+          var backLeftPowerTurnLeft = 0;
+          var backRightPowerTurnLeft = 0;
+          var turnLeftMotion = 0;
+        }
+        // "e" key ... strafe right
+        if (gamepad1.pressKey(69)) {
+          var frontLeftPowerStrafeRight = -0.5;
+          var frontRightPowerStrafeRight = 0.5;
+          var backLeftPowerStrafeRight = -0.5;
+          var backRightPowerStrafeRight = 0.5;
+          var strafeRightMotion = 1;
+        } else {
+          var frontLeftPowerStrafeRight = 0;
+          var frontRightPowerStrafeRight = 0;
+          var backLeftPowerStrafeRight = 0;
+          var backRightPowerStrafeRight = 0;
+          var strafeRightMotion = 0;
+        }
+        // "q" key ... strafe left
+        if (gamepad1.pressKey(81)) {
+          var frontLeftPowerStrafeLeft = 0.5;
+          var frontRightPowerStrafeLeft = -0.5;
+          var backLeftPowerStrafeLeft = 0.5;
+          var backRightPowerStrafeLeft = -0.5;
+          var strafeLeftMotion = 1;
+        } else {
+          var frontLeftPowerStrafeLeft = 0;
+          var frontRightPowerStrafeLeft = 0;
+          var backLeftPowerStrafeLeft = 0;
+          var backRightPowerStrafeLeft = 0;
+          var strafeLeftMotion = 0;
+        }
+        if (forwardMotion == 0 && backwardMotion == 0 && turnLeftMotion == 0 && turnRightMotion == 0 && strafeLeftMotion == 0 && strafeRightMotion == 0){
+          var backLeftPower = 0;
+          var backRightPower = 0;
+          var frontLeftPower = 0;
+          var frontRightPower = 0;
+        } else {
+          var backLeftPower = (backLeftPowerStrafeLeft + backLeftPowerStrafeRight + backLeftPowerTurnLeft + backLeftPowerTurnRight + backLeftPowerBackward + backLeftPowerForward)/(forwardMotion+backwardMotion+turnLeftMotion+turnRightMotion+strafeLeftMotion+strafeRightMotion);
+          var backRightPower = (backRightPowerStrafeLeft + backRightPowerStrafeRight + backRightPowerTurnLeft + backRightPowerTurnRight + backRightPowerBackward + backRightPowerForward)/(forwardMotion+backwardMotion+turnLeftMotion+turnRightMotion+strafeLeftMotion+strafeRightMotion);
+          var frontLeftPower = (frontLeftPower + frontLeftPowerStrafeRight + frontLeftPowerTurnLeft + frontLeftPowerTurnRight + frontLeftPowerBackward + frontLeftPowerFoward)/(forwardMotion+backwardMotion+turnLeftMotion+turnRightMotion+strafeLeftMotion+strafeRightMotion);
+          var frontRightPower = (frontRightPowerStrafeLeft + frontRightPowerStrafeRight + frontRightPowerTurnLeft + frontRightPowerTurnRight + frontRightPowerBackward + frontRightPowerForward)/(forwardMotion+backwardMotion+turnLeftMotion+turnRightMotion+strafeLeftMotion+strafeRightMotion);
+        }
+        backLeftDrive.setPower(backLeftPower);
+        backRightDrive.setPower(backRightPower);
+        frontLeftDrive.setPower(frontLeftPower);
+        frontRightDrive.setPower(frontRightPower);
+      }
+    }
+    
+    // Change the keys to the controls of the controller. Change the motors.
